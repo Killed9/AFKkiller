@@ -34,7 +34,7 @@ import shutil
 # ====== CONFIGURABLE CONSTANTS ======
 APP_NAME = "KILLERAFK"
 OWNER_ID = "oAiDnmxnGr"
-APP_VERSION = "1.2"  # <-- Bump with each release
+APP_VERSION = "1.3"  # <-- Bump with each release
 LICENSE_FILE = "license.json"
 DISCORD_INVITE_URL = "https://discord.gg/vmUP8CzZSe"
 
