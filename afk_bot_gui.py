@@ -34,12 +34,12 @@ import shutil
 # ====== CONFIGURABLE CONSTANTS ======
 APP_NAME = "KILLERAFK"
 OWNER_ID = "oAiDnmxnGr"
-APP_VERSION = "1.0"  # <-- Bump with each release
+APP_VERSION = "1.2"  # <-- Bump with each release
 LICENSE_FILE = "license.json"
 DISCORD_INVITE_URL = "https://discord.gg/vmUP8CzZSe"
 
-GOFILE_VERSION_URL = "https://store-na-phx-1.gofile.io/download/direct/c7e19624-e8b9-46e5-b17d-5fdd5546ea5f/version.txt.txt"
-GOFILE_SCRIPT_URL  = "https://store8.gofile.io/download/direct/49bc2e7a-0265-4e5a-866e-0875c2293039/afk_bot_gui.py"
+GOFILE_VERSION_URL = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/version.txt"
+GOFILE_SCRIPT_URL  = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/afk_bot_gui.py"
 UPDATE_SCRIPT_NAME = "afk_bot_gui_update.py"
 UPDATER_HELPER_NAME = "update_helper.py"
 MAIN_SCRIPT_NAME = os.path.basename(__file__)
