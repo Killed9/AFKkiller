@@ -5,7 +5,7 @@ Author: Killed9 / ChatGPT
 Features:
 - License checking
 - GUI with Tkinter
-- Auto-update via Gofile (version.txt + script swap & restart)
+- Auto-update via GitHub (version.txt + script swap & restart)
 - Full title in red (no black AFK)
 """
 
@@ -34,12 +34,13 @@ import shutil
 # ====== CONFIGURABLE CONSTANTS ======
 APP_NAME = "KILLERAFK"
 OWNER_ID = "oAiDnmxnGr"
-APP_VERSION = "1.3"  # <-- Bump with each release
+APP_VERSION = "1.3"  # <--- Bump this BEFORE uploading!
 LICENSE_FILE = "license.json"
 DISCORD_INVITE_URL = "https://discord.gg/vmUP8CzZSe"
 
-GOFILE_VERSION_URL = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/version.txt"
-GOFILE_SCRIPT_URL  = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/afk_bot_gui.py"
+# --- THESE ARE GITHUB LINKS ---
+GITHUB_VERSION_URL = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/version.txt"
+GITHUB_SCRIPT_URL  = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/afk_bot_gui.py"
 UPDATE_SCRIPT_NAME = "afk_bot_gui_update.py"
 UPDATER_HELPER_NAME = "update_helper.py"
 MAIN_SCRIPT_NAME = os.path.basename(__file__)
@@ -74,18 +75,18 @@ class_order = [
 THRESHOLD = 0.80
 AUMID = "38985CA0.COREBase_5bkah9njm3e9g!codShip"
 
-# ====== AUTO-UPDATER FUNCTIONS ======
+# ====== AUTO-UPDATER FUNCTIONS (GITHUB) ======
 
 def log_update_status(msg):
-    """Default log for updater before GUI is available."""
     print("[UPDATE]", msg)
 
 def check_for_update(current_version, log_func=log_update_status):
-    """Check Gofile for a new version. Returns (needs_update, latest_version)."""
+    """Check GitHub for a new version. Returns (needs_update, latest_version)."""
     try:
-        resp = requests.get(GOFILE_VERSION_URL, timeout=6)
+        resp = requests.get(GITHUB_VERSION_URL, timeout=6)
         resp.raise_for_status()
         latest_version = resp.text.strip()
+        log_func(f"Remote version: {latest_version}, Local version: {current_version}")
         if latest_version != current_version:
             log_func(f"New version available: {latest_version}")
             return True, latest_version
@@ -95,13 +96,22 @@ def check_for_update(current_version, log_func=log_update_status):
         return False, None
 
 def download_latest_script(log_func=log_update_status):
-    """Download the latest script from Gofile."""
+    """Download the latest script from GitHub and check its version line (debug only)."""
     try:
-        resp = requests.get(GOFILE_SCRIPT_URL, timeout=12)
+        resp = requests.get(GITHUB_SCRIPT_URL, timeout=12)
         resp.raise_for_status()
         with open(UPDATE_SCRIPT_NAME, "wb") as f:
             f.write(resp.content)
         log_func("Downloaded latest script successfully.")
+        # Debug: show version in downloaded file
+        try:
+            with open(UPDATE_SCRIPT_NAME, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip().startswith("APP_VERSION"):
+                        log_func(f"[DEBUG] Downloaded script version line: {line.strip()}")
+                        break
+        except Exception as e:
+            log_func(f"[DEBUG] Could not read version from update: {e}")
         return True
     except Exception as e:
         log_func(f"Failed to download update: {e}")
@@ -218,7 +228,7 @@ def check_license_key(license_key):
     except Exception as e:
         return False, f"Network/Error: {e}"
 
-# ====== GUI & BOT ======
+# ====== GUI & BOT (ALL YOUR LOGIC BELOW IS INCLUDED, UNCHANGED) ======
 
 def get_all_png_templates(folder):
     try:
