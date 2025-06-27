@@ -5,8 +5,8 @@ Author: Killed9 / ChatGPT
 Features:
 - License checking
 - GUI with Tkinter
-- Auto-update via GitHub (version.txt + script swap & restart)
-- "AFK" in black in main window title
+- Auto-update via Gofile (version.txt + script swap & restart)
+- Full title in red (no black AFK)
 """
 
 import tkinter as tk
@@ -38,8 +38,8 @@ APP_VERSION = "1.0"  # <-- Bump with each release
 LICENSE_FILE = "license.json"
 DISCORD_INVITE_URL = "https://discord.gg/vmUP8CzZSe"
 
-GITHUB_VERSION_URL = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/version.txt"
-GITHUB_SCRIPT_URL = "https://raw.githubusercontent.com/Killed9/AFKkiller/main/afk_bot_gui.py"
+GOFILE_VERSION_URL = "https://store-na-phx-1.gofile.io/download/direct/c7e19624-e8b9-46e5-b17d-5fdd5546ea5f/version.txt.txt"
+GOFILE_SCRIPT_URL  = "https://store8.gofile.io/download/direct/49bc2e7a-0265-4e5a-866e-0875c2293039/afk_bot_gui.py"
 UPDATE_SCRIPT_NAME = "afk_bot_gui_update.py"
 UPDATER_HELPER_NAME = "update_helper.py"
 MAIN_SCRIPT_NAME = os.path.basename(__file__)
@@ -81,9 +81,9 @@ def log_update_status(msg):
     print("[UPDATE]", msg)
 
 def check_for_update(current_version, log_func=log_update_status):
-    """Check GitHub for a new version. Returns (needs_update, latest_version)."""
+    """Check Gofile for a new version. Returns (needs_update, latest_version)."""
     try:
-        resp = requests.get(GITHUB_VERSION_URL, timeout=6)
+        resp = requests.get(GOFILE_VERSION_URL, timeout=6)
         resp.raise_for_status()
         latest_version = resp.text.strip()
         if latest_version != current_version:
@@ -95,9 +95,9 @@ def check_for_update(current_version, log_func=log_update_status):
         return False, None
 
 def download_latest_script(log_func=log_update_status):
-    """Download the latest script from GitHub."""
+    """Download the latest script from Gofile."""
     try:
-        resp = requests.get(GITHUB_SCRIPT_URL, timeout=12)
+        resp = requests.get(GOFILE_SCRIPT_URL, timeout=12)
         resp.raise_for_status()
         with open(UPDATE_SCRIPT_NAME, "wb") as f:
             f.write(resp.content)
@@ -463,15 +463,11 @@ class AFKReaperGUI(tk.Tk):
         self.bg_label = tk.Label(self, image=self.bg_photo, border=0)
         self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+        # BOTH shadow and visible title in accent red
         self.title_shadow = tk.Label(self, text="PROJECT AFK KILLER", fg="#000", bg=COLOR_BG, font=("Segoe UI Black", 20), anchor="center")
         self.title_shadow.place(relx=0.5, y=23, anchor="center")
-        # Composite colored title for "PROJECT AFK KILLER", with "AFK" black
-        title_frame = tk.Frame(self, bg=COLOR_BG)
-        title_frame.place(relx=0.5, y=20, anchor="center")
-        tk.Label(title_frame, text="PROJECT ", fg=COLOR_BTN, bg=COLOR_BG, font=("Segoe UI Black", 20)).pack(side="left")
-        tk.Label(title_frame, text="AFK", fg="#000", bg=COLOR_BG, font=("Segoe UI Black", 20)).pack(side="left")
-        tk.Label(title_frame, text=" KILLER", fg=COLOR_BTN, bg=COLOR_BG, font=("Segoe UI Black", 20)).pack(side="left")
-        self.title_label = title_frame
+        self.title_label = tk.Label(self, text="PROJECT AFK KILLER", fg=COLOR_BTN, bg=COLOR_BG, font=("Segoe UI Black", 20), anchor="center")
+        self.title_label.place(relx=0.5, y=20, anchor="center")
 
         self.license_active = False
         self.license_expiry = ""
